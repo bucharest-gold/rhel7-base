@@ -30,16 +30,16 @@ ENV \
 # Also setup the 'openshift' user that is used for the build execution and for the
 # application runtime execution.
 RUN subscription-manager register --username=${SUBMGR_USER} --password=${SUBMGR_PASS} --auto-attach && \ 
-  INSTALL_PKGS="findutils \
-  gettext \
-  tar \
-  unzip \
-  yum-utils" && \
-  mkdir -p ${HOME}/.pki/nssdb && \
-  chown -R 1001:0 ${HOME}/.pki && \
+  INSTALL_PKGS="unzip \
+  rh-git29 \
+  gcc-c++" && \
+  subscription-manager repos --enable rhel-7-server-extras-rpms && \
+  subscription-manager repos --enable rhel-server-rhscl-7-rpms && \
   yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
   rpm -V $INSTALL_PKGS && \
-  yum clean all -y
+  yum clean all -y && \
+  rm -rf /var/cache/yum && \
+  subscription-manager unregister
 
 # Directory with the sources is set as the working directory so all STI scripts
 # can execute relative to this path.
@@ -50,3 +50,4 @@ ENTRYPOINT ["exec \"$@\""]
 RUN useradd -u 1001 -r -g 0 -d ${HOME} -s /sbin/nologin \
       -c "Default Application User" default && \
   chown -R 1001:0 ${APP_ROOT}
+
