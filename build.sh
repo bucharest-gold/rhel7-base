@@ -4,3 +4,4 @@
 echo "-> Building bucharestgold/rhel7-base ..."
 docker build --build-arg USER=${USER} --build-arg PASS=${PASS} -t bucharestgold/rhel7-base .
 docker-squash -f registry.access.redhat.com/rhel7 bucharestgold/rhel7-base:latest -t bucharestgold/rhel7-base:latest
+./test.sh

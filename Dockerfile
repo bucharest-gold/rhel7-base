@@ -41,11 +41,13 @@ RUN subscription-manager register --username=${USER} --password=${PASS} --auto-a
   rm -rf /var/cache/yum && \
   subscription-manager unregister
 
+COPY bin/ /usr/bin/
+
 # Directory with the sources is set as the working directory so all STI scripts
 # can execute relative to this path.
 WORKDIR ${HOME}
 
-ENTRYPOINT ["exec \"$@\""]
+ENTRYPOINT ["container-entrypoint"]
 
 RUN useradd -u 1001 -r -g 0 -d ${HOME} -s /sbin/nologin \
       -c "Default Application User" default && \
