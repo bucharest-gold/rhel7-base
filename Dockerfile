@@ -1,7 +1,7 @@
 FROM registry.access.redhat.com/rhel7
 
-ARG SUBMGR_USER
-ARG SUBMGR_PASS
+ARG USER
+ARG PASS
 
 ENV SUMMARY="Base image which allows using of source-to-image."	\
     DESCRIPTION="The s2i-core image provides any images layered on top of it \
@@ -29,7 +29,7 @@ ENV \
 # consume.
 # Also setup the 'openshift' user that is used for the build execution and for the
 # application runtime execution.
-RUN subscription-manager register --username=${SUBMGR_USER} --password=${SUBMGR_PASS} --auto-attach && \ 
+RUN subscription-manager register --username=${USER} --password=${PASS} --auto-attach && \ 
   INSTALL_PKGS="unzip \
   rh-git29 \
   gcc-c++" && \
