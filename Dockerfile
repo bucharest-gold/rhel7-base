@@ -30,8 +30,7 @@ ENV \
 # Also setup the 'openshift' user that is used for the build execution and for the
 # application runtime execution.
 RUN subscription-manager register --username=${USER} --password=${PASS} --auto-attach && \ 
-  INSTALL_PKGS="unzip \
-  rh-git29 \
+  INSTALL_PKGS="rh-git29 \
   gcc-c++" && \
   subscription-manager repos --enable rhel-7-server-extras-rpms && \
   subscription-manager repos --enable rhel-server-rhscl-7-rpms && \
@@ -42,6 +41,18 @@ RUN subscription-manager register --username=${USER} --password=${PASS} --auto-a
   subscription-manager unregister
 
 COPY bin/ /usr/bin/
+
+ENV CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/git \
+    ENABLED_COLLECTIONS=rh-git29
+
+# When bash is started non-interactively, to run a shell script, for example it
+# looks for this variable and source the content of this file. This will enable
+# the SCL for all scripts without need to do 'scl enable'.
+ENV BASH_ENV=${CONTAINER_SCRIPTS_PATH}/scl_enable \
+    ENV=${CONTAINER_SCRIPTS_PATH}/scl_enable \
+    PROMPT_COMMAND=". ${CONTAINER_SCRIPTS_PATH}/scl_enable"
+
+ADD root /
 
 # Directory with the sources is set as the working directory so all STI scripts
 # can execute relative to this path.
