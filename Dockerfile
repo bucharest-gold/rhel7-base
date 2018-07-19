@@ -31,7 +31,8 @@ ENV \
 # application runtime execution.
 RUN subscription-manager register --username=${USER} --password=${PASS} --auto-attach && \ 
   INSTALL_PKGS="rh-git29 \
-  gcc-c++" && \
+  gcc-c++ \
+  make" && \
   subscription-manager repos --enable rhel-7-server-extras-rpms && \
   subscription-manager repos --enable rhel-server-rhscl-7-rpms && \
   yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
